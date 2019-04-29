@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Ellie Parobek, Project 2-->
+    <meta charset="utf-8" />
+    <title>Ellie Parobek P2</title>
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="media/css/style.css"/>
+    <link rel="stylesheet" href="media/css/portfolio.jquery.css">
+    <link rel="stylesheet" href="media/css/datatables.min.css">
+    <link rel="stylesheet" href="media/css/jquery-confirm.min.css">
+
+    <!-- JS plug-ins -->
+    <script type="text/javascript" src="https://code.jquery.com/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <script src="media/js/portfolio.jquery.js"></script>
+    <script src="media/js/datatables.min.js"></script>
+    <script src="media/js/jquery-confirm.min.js"></script>
+    
+</head>
+<body>
+    <script type="text/javascript">
+        // Check browser
+        var IE8orLess = false;
+        if(IE8orLess || !document.getElementById){
+            alert("This is an old browser. To use this page get a new one");
+            window.document.location.href = "http://outdatedbrowser.com/en";
+        }
+        
+        var y = '';
+        var x = '';
+        var grad = '';
+        var under = '';
+        
+        $(document).ready(function(){
+            // About section
+            myXhr('get',{path:'/about/'},'#about').done(function(json){
+                    var x="<h2>"+json.title+"</h2>";
+                    x+="<p>"+json.description+"</p>";
+                    x+="<blockquote>&quot;"+json.quote+"&quot;</blockquote>";
+                    x+="<blockquote>-"+json.quoteAuthor+"</blockquote>";
+                    $('#about').html(x);
+            });
+            
+            // Majors section
+            // Undergraduate degrees
+            myXhr('get',{path:'/degrees/undergraduate/'},'#content').done(function(json){
+                $.each(json.undergraduate,function(i, item){
+                    under += '<div id="insideContent"><h2>' + item.title + '</h2>' + '<p>' + item.description + '</p>';
+                    under += '<img id="images" src="media/images/' + item.degreeName + '.png" height: "100px"></div>';
+                });
+                $('#content').append(under);
+            });
+            // Graduate degrees
+            myXhr('get',{path:'/degrees/graduate/'},'#content').done(function(json){
+                $.each(json.graduate,function(i, item){
+                    // Check that it isn't a certificate
+                    if(item.hasOwnProperty('title')){
+                        grad += '<div id="insideContent"><h2>'+item.title+'</h2>'+'<p>'+item.description+'</p>';
+                        grad += '<img id="images" src="media/images/' + item.degreeName + '.png" height: "100px"></div>';
+                    }
+                });
+            });
+            
+            // Minors section
+            myXhr('get',{path:'/minors/'},'#minors').done(function(json){
+                var num = 1;
+                var m = '';
+                m = '<h1>Minors</h1><ul class="thumbs" id="thumbdiff">';
+                // Get the names
+                $.each(json.UgMinors,function(i, item){
+                    m += '<li style="width: 20%"><a href="#thumb3' + num + '" class="thumbnail" style="background-color:#' + Math.floor(Math.random()*16777215).toString(16) + '"><h4>' + item.name + '</h4><span class="description">'+ item.title +'</span></a></li>';
+                    num += 1;
+                });
+                m += '</ul><div class="portfolio-content">';
+                num = 1;
+                // Show their descriptions
+                $.each(json.UgMinors,function(i, item){
+                    m += '<div id="thumb3' + num + '"><h2>' + item.name + ' - ' + item.title + '</h2><p>' + item.description + '</p><p>Courses: ' + item.courses + '</p>';
+                    if(item.note !== ''){
+                       m += '<p>(Note: ' + item.note + ')</p>';
+                    }
+                    m += '</div>';
+                    num += 1;
+                });
+                m += '</div>'; 
+                $('#minors').html(m);
+                // Create portfolio
+                $('#thumbdiff').portfolio({
+                    cols: 4,
+                    transition: 'slideDown'
+                })
+            });;
+            
+            // Employment section
+            // Introduction
+            myXhr('get',{path:'/employment/introduction/content/'},'#employment0').done(function(json){
+                var data = '';
+                data += '<h1>Academic excellence equals career performance!</h1>';
+                $.each(json.content,function(i, item){
+                    data += '<h3>' + item.title + '</h3>';
+                    data += '<p>' + item.description + '</p>';
+                });
+                $('#employment0').append(data);
+            });
+            // Degree statistics
+            myXhr('get',{path:'/employment/degreeStatistics/statistics/'},'#employment1').done(function(json){
+                var data = '<hr><h3>Statistics</h3>';
+                $.each(json.statistics,function(i, item){
+                    data += '<p><span style = "color: #ffa31a">' + item.value + '</span> ' + item.description + '</p>';
+                }); 
+                $('#employment1').append(data);
+            });
+            // Co-op table
+            myXhr('get',{path:'/employment/coopTable/coopInformation/'},'#employment2').done(function(json){
+                var t = '<hr><h3>Employers</h3><table id="tableT"><thead><tr><th>Employer</th><th>Degree</th><th>City</th><th>Term</th></tr></thead><tbody>';
+                $.each(json.coopInformation,function(i, item){
+                    t += '<tr><td>' + item.employer + '</td>';
+                    t += '<td>' + item.degree + '</td>';
+                    t += '<td>' + item.city + '</td>';
+                    t += '<td>' + item.term + '</td></tr>';
+                });
+                t += '</tbody></table>';
+                $('#employment2').append(t);
+                $('#tableT').DataTable();
+            });
+            
+            // People section
+            // Faculty
+            var num = 1;
+            myXhr('get',{path:'/people/'},'#people').done(function(json){
+                x = '<h1>Faculty</h1><ul class="thumbs" id="thumbs">';
+                // Get the images and names
+                $.each(json.faculty,function(i, item){
+                    x += '<li style="width: 20%"><a href="#thumb' + num + '" class="thumbnail" style="background-image: url(' + item.imagePath + ')"><h4>' + item.name + '</h4><span class="description">'+ item.title +'</span></a></li>';
+                    num += 1;
+                });
+                x += '</ul><div class="portfolio-content">';
+                num = 1;
+                // Show their descriptions
+                $.each(json.faculty,function(i, item){
+                    x += '<div id="thumb' + num + '"><h2>' + item.name + ' - ' + item.title + '</h2><p>Username: ' + item.username + '</p><p>Office: ' + item.office + '</p><p>Email: ' + item.email + '</p><p>Phone: ' + item.phone + '</p><p>Interest areas: ' + item.interestArea + '</p></div>';
+                    num += 1;
+                });
+                x += '</div>'; 
+                $('#people').html(x);
+                // Create portfolio
+                $('#thumbs').portfolio({
+                    cols: 6,
+                    transition: 'slideDown'
+                })
+            });;
+            // Staff
+            myXhr('get',{path:'/people/'},'#people').done(function(json){
+                y = '<h1>Staff</h1><ul class="thumbs" id="thumbs2">';
+                var num2 = num;
+                // Get the images and names
+                $.each(json.staff,function(i, item){
+                    y += '<li style="width: 20%"><a href="#thumb2' + num2 + '" class="thumbnail" style="background-image: url(' + item.imagePath + ')"><h4>' + item.name + '</h4><span class="description">'+ item.title +'</span></a></li>';
+                    num2 += 1;
+                });
+                y += '</ul><div class="portfolio-content">';
+                num2 = num;
+                // Show their descriptions
+                $.each(json.staff,function(i, item){
+                    y += '<div id="thumb2' + num2 + '"><h2>' + item.name + ' - ' + item.title + '</h2><p>Username: ' + item.username + '</p><p>Office: ' + item.office + '</p><p>Email: ' + item.email + '</p><p>Phone: ' + item.phone + '</p><p>Interest areas: ' + item.interestArea + '</p></div>';
+                    num2 += 1;
+                });
+                y += '</div>'; 
+                // Create portfolio
+                $('#thumbs2').portfolio({
+                    cols: 6,
+                    transition: 'slideDown'
+                })
+            });;
+            
+            // Research
+            myXhr('get',{path:'/research/byInterestArea'},'#research').done(function(json){
+                var res = '<h2>Check out some research:</h2>';
+                $.each(json.byInterestArea,function(i, item){
+                    var str = item.citations.toString();
+                    str = str.replace(/["']/g, "");
+                    res += '<button class="resButton" onclick="$.alert({title: \''+ item.areaName + '\', content: \''+ str + '\'})">' + item.areaName + '</button>';
+                });
+                $('#research').html(res);
+            });
+            
+            // News
+            myXhr('get',{path:'/news/older'},'#news').done(function(json){
+                var news = '<h2>News:</h2>';
+                $.each(json.older,function(i, item){
+                    news += '<button class="resButton" onclick="$.alert({title: \''+ item.date + '\', content: \''+ item.description + '\'})">' + item.title + '</button>';
+                });
+                $('#news').html(news);
+            });
+            
+            // Footer section
+            var f = '';
+            var g = '';
+            var h = '';
+            myXhr('get',{path:'/footer/social'},'#footer').done(function(json){
+                f += '<p>' + json.social.title + ': ' + json.social.tweet + '. By: <a href = ' + json.social.twitter + '>' + json.social.by + '</a></p>';
+                $('#footerF').html(f);
+            });
+            myXhr('get',{path:'/footer/quickLinks'},'#footer').done(function(json){
+                $.each(json.quickLinks,function(i, item){
+                    g += '<a href = ' + item.href + '>' + item.title + '</a><br>';
+                });
+                $('#footerG').html(g);
+            });
+            myXhr('get',{path:'/footer/copyright'},'#footer').done(function(json){
+                h += json.copyright.html;
+                $('#footerH').html(h);
+            });
+        });
+        
+        // Loading spinner
+        function myXhr(t, d, id){
+            return $.ajax({
+                type:t,
+                url:'proxy.php',
+                dataType:'json',
+                data:d,
+                cache:false,
+                async:true,
+                beforeSend:function(){
+                    $(id).append('<img src="media/images/gears.gif" class="spin"/>');
+                }
+            }).always(function(){
+                // Kill spinner
+                $(id).find('.spin').fadeOut(2000,function(){
+                    $(this).remove();
+                });
+            }).fail(function(){
+                
+            });
+        }
+        
+        // Buttons for switching from faculty to staff
+        function showStaff(){
+            $('#people').html(y);
+            $('#thumbs2').portfolio({
+                cols: 6,
+                transition: 'slideDown'
+            })
+        }
+        function showFac(){
+            $('#people').html(x);
+            $('#thumbs').portfolio({
+                cols: 6,
+                transition: 'slideDown'
+            })
+        }
+        
+        // Buttons for switching from undergraduate to graduate degrees
+        function showGrad(){
+            $('#content').html(grad);
+        }
+        function showUnder(){
+            $('#content').html(under);
+        }
+        
+    </script>
+    
+    <header> 
+        <h2>INFORMATION SCIENCES AND TECHNOLOGY AT RIT</h2>
+        <!-- Navigation button -->
+        <button id="button">&nabla; Navigation</button>
+        <div id="nav" class="nav">
+          <div class="nav-content">
+            <span class="close">&times;</span>
+            <ul id="inside">
+                <li><a href = "#about">About Us</a></li>
+                <li><a href = "#content">IST Majors</a></li>
+                <li><a href = "#minors">IST Minors</a></li>
+                <li><a href = "#employment">Employment</a></li>
+                <li><a href = "#map">Co-op Map</a></li>
+                <li><a href = "#people">People</a></li>
+                <li><a href = "#research">Research</a></li>
+                <li><a href = "#news">News</a></li>
+                <li><a href = "#contact">Contact</a></li>
+            </ul>
+          </div>
+        </div>
+    </header>
+    
+    <div class="top" id="top1">
+        <p>Information Sciences and Technology at RIT!</p>
+    </div>
+	
+	<section id="about"></section>
+    
+    <div class="top" id="top2">
+        <p>IST Majors</p>
+        <button id="button2" onclick="showUnder()">Undergraduate</button><button id="button2" onclick="showGrad()">Graduate</button>
+    </div>
+  
+	<section id="content"></section>
+    
+    <div class="top" id="top4">
+        <p>IST Minors</p>
+    </div>
+    
+    <section id="minors"></section>
+    
+    <div class="top" id="top5">
+        <p>Employment</p>
+    </div>
+    
+    <div id="employment">
+        <section id="employment0"></section>
+        <section id="employment1"></section>
+        <section id="employment2"></section>
+    </div>
+    
+    <section id="map">
+        <h2>Where have our students been on co-op?</h2>
+        <div id="map-div">
+            <iframe id="map-iframe"
+                src="https://ist.rit.edu/api/map.php"
+                width="100%" scrolling="no" height="600px">
+                <p>Your browser does not support showing the Map.
+                You are using an old browser, get a new browser and try again.</p>
+             </iframe>
+        </div>
+    </section>
+    
+    <div class="top" id="top3">
+        <p>People in IST</p>
+        <button id="button2" onclick="showFac()">Faculty</button><button id="button2" onclick="showStaff()">Staff</button>
+    </div>
+    
+    <section id="people"></section>
+    
+    <div class="top" id="top6">
+        <p>Research</p>
+    </div>
+    
+    <section id="research"></section>
+    
+    <div class="top" id="top7">
+        <p>News</p>
+    </div>
+    
+    <section id="news"></section>
+    
+    <section id="contact">
+        <div id="contact-div">
+            <iframe
+                src="https://ist.rit.edu/api/contactForm.php"
+                width="100%" height="550px">
+                <p>Your browser does not support showing the Contact Form.
+                You are using an old browser, get a new browser and try again.</p>
+            </iframe>
+        </div>
+    </section>
+    
+    <footer id="footer">
+        <div id="footerF"></div>
+        <div id="footerG"></div>
+        <div id="footerH"></div>
+    </footer>
+        
+    <script>
+        // Navigation button js
+        var nav = document.getElementById('nav');
+        var btn = document.getElementById('button');
+        var span = document.getElementsByClassName('close')[0];
+        btn.onclick = function() {
+            nav.style.display = 'block';
+        }
+        span.onclick = function() {
+            nav.style.display = 'none';
+        }
+        window.onclick = function(event) {
+            if (event.target == nav) {
+                nav.style.display = "none";
+            }
+        }
+    </script>
+    
+</body>
+</html>

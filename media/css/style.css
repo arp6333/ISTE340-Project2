@@ -1,0 +1,321 @@
+/**
+* Ellie Parobek
+* Project 2 CSS
+*/
+
+/** Some basic styles */
+body{
+    font-family: Verdana;
+    background-color: darkorange;
+}
+h1{
+    text-align: center;
+    color: #cc7a00;
+}
+h2{
+    text-align: center; 
+    color: #cc7a00;
+}
+h3{
+   text-align: center; 
+   color: #ff9900; 
+}
+a{
+    color: lightsalmon;
+    text-decoration: none;
+}
+a.hover{
+    color: white;
+}
+a.active{
+   color: black; 
+}
+a.visited{
+   color: darkgoldenrod;
+}
+ul{
+    list-style-type: circle;
+}
+
+/** Header at top of page */
+header{
+    text-align: left;
+    width: 100%;
+    padding-left: 5px;
+    left: -2px;
+    top: -2px;
+    background: black;
+    color: white;
+    font-size: 8px;
+    font-family: Andale Mono, monospace;
+    position: fixed;
+    z-index: 99;
+    border-bottom: 1px solid orange;
+}
+/** Navigation button in header */
+.nav{
+    display: none;
+    position: fixed;
+    z-index: 99;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgb(0,0,0);
+    background-color: rgba(0,0,0,0.4);
+}
+.nav-content{
+    background-color: #fefefe;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+}
+.close{
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+.close:hover, .close:focus{
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+#button{
+    background-color: orange;
+    color: white;
+    position: absolute;
+    font-family: Andale Mono, monospace;
+    font-size: 24px;
+}
+#inside{
+    color: black;
+    font-size: 24px;
+}
+
+/** Styling for each section */
+/** Titles */
+.top{
+    text-align: center;
+    width: 100%;
+    color: white;
+    padding-top: 70px;
+    padding-bottom: 20px;
+    font-family: Andale Mono, monospace;
+    font-size: 28px;
+    z-index: 1;
+    margin-top: 10px;
+}
+.top p{
+    -webkit-text-fill-color: white;
+    -webkit-text-stroke-width: 1px;
+    -webkit-text-stroke-color: black;  
+    font-weight: bolder;
+    font-size: 32px;
+}
+#top1{
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover; 
+    background-image: url("../images/bg.jpg"); 
+}
+#top2{
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover; 
+    background-image: url("../images/bg2.jpg"); 
+}
+#top3{
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover; 
+    background-image: url("../images/bg3.jpg"); 
+}
+#top4{
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover; 
+    background-image: url("../images/bg4.jpg"); 
+}
+#top5{
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover; 
+    background-image: url("../images/bg5.jpg"); 
+}
+#top6{
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover; 
+    background-image: url("../images/bg6.jpg"); 
+}
+#top7{
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover; 
+    background-image: url("../images/bg7.jpg"); 
+}
+
+/** About */
+#about{
+    background-color: white;
+    color: black;
+    padding-left: 80px;
+    padding-right: 80px;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    height: auto;
+    font-family: Verdana;
+    border-radius: 25px;
+    z-index: 3;
+    margin-top: 10px;
+}
+blockquote{
+    font-family: Andale Mono, monospace;
+    color: darkorange !important;
+}
+#about h2{
+    color: #cc7a00;
+}
+
+/** Majors */
+#content{
+    background-color: white;
+    font-family: OCR A Std, monospace;
+    color: black;
+    margin-top: 20px;
+    padding: 15px;
+    border-radius: 25px;
+    border: 10px solid #ffebcc;
+}
+#insideContent{
+    text-align: center;
+}
+#insideContent h2{
+    color: #cc7a00;
+}
+#images{
+    width: 200px;
+    height: auto;
+}
+
+/** Minors */
+#minors{
+    background-color: white;
+    color: black;
+    margin-top: 20px;
+    padding: 15px;
+    border-radius: 25px;
+    border: 10px solid #ffebcc;
+}
+
+/** Employment */
+#employment{
+    background-color: white;
+    color: black;
+    margin-top: 20px;
+    padding: 15px;
+    border-radius: 25px;
+    border: 10px solid #ffebcc;
+}
+
+/** Map and contact form */
+#contact-div{
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+#contact{
+    background-color: white;
+    text-align: center;
+    overflow: hidden;
+    border-radius: 25px;
+    border: 10px solid #ffebcc;
+    margin-top: 10px;
+}
+#map{
+    background-color: white;
+    text-align: center;
+    border-radius: 25px;
+    border: 10px solid #ffebcc;
+    padding-top: 25px;
+    margin-top: 10px;
+}
+#map-div{
+    width: 75%;
+    height: 750px;
+    overflow: hidden;
+    position: relative;
+    margin-left: 15%;
+}
+#map-iframe{
+    top: -300px;
+    left: -160px;
+    width: 1280px;
+    height: 1200px;
+    position: absolute;
+}
+
+/** People */
+#people{
+    background-color: white;
+    color: black;
+    margin-top: 20px;
+    padding: 15px;
+    border-radius: 25px;
+    border: 10px solid #ffebcc;
+}
+#button2{
+    background-color: orange;
+    color: white;
+    width: auto;
+    height: 40px;
+    text-align: center;
+    font-size: 24px;
+    font-family: Andale Mono, monospace;
+    border: 1px solid white !important;
+    margin-left: 10px;
+}
+
+/** Research */
+#research{
+    background-color: white;
+    color: black;
+    margin-top: 20px;
+    padding: 15px;
+    border-radius: 25px;
+    border: 10px solid #ffebcc;
+    text-align: center;
+}
+.resButton{
+    background-color: orange;
+    color: white;
+    margin: 5px;
+    font-family: Andale Mono, monospace;
+    font-size: 24px;
+}
+
+/** News */
+#news{
+    background-color: white;
+    color: black;
+    margin-top: 20px;
+    padding: 15px;
+    border-radius: 25px;
+    border: 10px solid #ffebcc;
+    text-align: center;
+    overflow: scroll;
+    height: 250px;
+}
+
+/** Footer */
+#footer{
+    color: white;
+    background-color: black;
+    padding: 10px;
+    margin-top: 10px;
+    border-radius: 25px;
+    text-align: center;
+}
